@@ -4,6 +4,7 @@ var api = express.Router();
 var mdAuth = require('../middlewares/authenticated'); 
 var connectMultiparty = require('connect-multiparty');
 var userController = require('../controllers/user.controller');
+var classController = require('../controllers/class.controller');
 
 //var mdUpload = connectMultiparty({ uploadDir: './uploads/users'});
 
@@ -16,6 +17,7 @@ api.post('/studentSave', userController.studentSave);
 api.post('/teacherSave', userController.teacherSave);
 
 //CLASS
+api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
 
 
 module.exports = api;
