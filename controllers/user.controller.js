@@ -307,16 +307,9 @@ module.exports = {
     getStudents,
     //TEACHER
     teacherSave,
-<<<<<<< Updated upstream
-
-
     login,
-    updateUser
-}
-=======
-    login,
+    updateUser,
     getTeachers,
     searchStudents,
     searchTeachers,
 }
->>>>>>> Stashed changes
