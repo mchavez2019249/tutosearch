@@ -186,7 +186,37 @@ function studentSave(req, res){
 }
 //----DELETE STUDENT
 //----SEARCH STUDENT
+function searchStudents(req, res){
+    var params = req.body;
+
+    if(params.search){
+        User.find({$or:[{name: params.search},
+                        {lastname: params.search},
+                        {username: params.search}]}, (err, resultsSearch)=>{
+                            if(err){
+                                return res.status(500).send({message: 'Error general'})
+                            }else if(resultsSearch){
+                                return res.send({resultsSearch})
+                            }else{
+                                return res.status(404).send({message: 'No hay registros para mostrar'})
+                            }
+                        })
+    }else{
+        return res.status(403).send({message: 'Ingresa algún dato en el campo de búsqueda'})
+    }
+}
 //----GET STUDENTS
+function getStudents(req, res){
+    User.find({}).exec((err, user)=>{
+    if(err){
+        res.status(500).send({message: 'Error en el servidor'})
+    }else if(user){
+        res.status(200).send({message: 'Usuarios encontrados', users:user})
+    }else{
+        res.status(200).send({message: 'No hay registros'})
+    }
+}) 
+}
 
 //--------TEACHER------------
 
@@ -234,7 +264,38 @@ function teacherSave(req, res){
 } 
 //----DELETE TEACHER
 //----SEARCH TEACHER
+function searchTeachers(req, res){
+    var params = req.body;
+
+    if(params.search){
+        User.find({$or:[{name: params.search},
+                        {lastname: params.search},
+                        {username: params.search}]}, (err, resultsSearch)=>{
+                            if(err){
+                                return res.status(500).send({message: 'Error general'})
+                            }else if(resultsSearch){
+                                return res.send({resultsSearch})
+                            }else{
+                                return res.status(404).send({message: 'No hay registros para mostrar'})
+                            }
+                        })
+    }else{
+        return res.status(403).send({message: 'Ingresa algún dato en el campo de búsqueda'})
+    }
+}
 //----GET TEACHERS
+
+function getTeachers(req, res){
+    User.find({}).exec((err, user)=>{
+    if(err){
+        res.status(500).send({message: 'Error en el servidor'})
+    }else if(user){
+        res.status(200).send({message: 'Usuarios encontrados', users:user})
+    }else{
+        res.status(200).send({message: 'No hay registros'})
+    }
+}) 
+}
 
 
 
@@ -243,11 +304,19 @@ module.exports = {
     createInit,
     //STUDENT
     studentSave,
-
+    getStudents,
     //TEACHER
     teacherSave,
+<<<<<<< Updated upstream
 
 
     login,
     updateUser
 }
+=======
+    login,
+    getTeachers,
+    searchStudents,
+    searchTeachers,
+}
+>>>>>>> Stashed changes

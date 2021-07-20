@@ -22,6 +22,17 @@ api.post('/teacherSave', userController.teacherSave);
 api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
 
 
+
+api.get('getTeachers', userController.getTeachers);
+
+
+api.get('/getstudents', userController.getStudents);
+
+
+api.post('/searchStudent', userController.searchStudents);
+
+api.post('/searchTacher', userController.searchTeachers);
+
 module.exports = api;
 
 
