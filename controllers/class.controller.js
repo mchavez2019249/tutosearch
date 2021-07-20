@@ -7,7 +7,7 @@ var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
 
-//save
+//SAVE
 function saveClass (req, res){
     let userId = req.params.id;  
     var clas = new Class();
@@ -65,7 +65,7 @@ function saveClass (req, res){
     }
 }
 
-//update
+//UPDATE
 function updateClass(req, res){
     let userId = req.params.idU;
     let classId = req.params.idC;
@@ -111,7 +111,7 @@ function updateClass(req, res){
 }
 
 
-//delete
+//DELETE
 function deleteClass(req, res){
     let teacherId = req.params.idT;
     let classId = req.params.idC;
