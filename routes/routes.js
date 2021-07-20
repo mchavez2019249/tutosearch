@@ -8,7 +8,7 @@ var userController = require('../controllers/user.controller');
 //var mdUpload = connectMultiparty({ uploadDir: './uploads/users'});
 
 
-api.get('/prueba', userController.prueba);
+api.post('/login', userController.login);
 
 //STUDENT
 api.post('/studentSave', userController.studentSave);

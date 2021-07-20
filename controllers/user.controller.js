@@ -49,16 +49,47 @@ function createInit(req,res){
     })
 }
 
-function prueba(req, res){
-    res.status(200).send({message: 'Todo correcto'})
-}
 
 //LOGIN
+function login(req, res){
+    var params = req.body;
+
+    if(params.username && params.password){
+        User.findOne({username: params.username}, (err, userFind)=>{
+            if(err){
+                return res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(userFind){
+                bcrypt.compare(params.password, userFind.password, (err, passwordCheck)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error general al comparar contraseñas'});
+                    }else if(passwordCheck){
+                        if(params.gettoken){
+                            res.send({
+                                token: jwt.createToken(userFind),
+                                user: userFind
+                            })
+                        }else{
+                            return res.send({message: 'Usuario logueado'});
+                        }
+                    }else{
+                        return res.status(403).send({message: 'Usuario o contraseña incorrectos'});
+                    }
+                })
+            }else{
+                return res.status(401).send({message: 'Usuario no encontrado'});
+            }
+        })
+    }else{
+        return res.status(404).send({message: 'Por favor introduce los campos obligatorios'});
+    }
+}
+
+//--------STUDENT------------
 
 
 //--------STUDENT------------
 
-//----SAVE STUDENT
+//SAVE STUDENT
 function studentSave(req, res){
     var user = new User();
     var params = req.body;
@@ -149,11 +180,12 @@ function teacherSave(req, res){
     }else{
         return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación del usuario'})
     }
-}
+}  
 //----UPDATE TEACHER
 //----DELETE TEACHER
 //----SEARCH TEACHER
 //----GET TEACHERS
+
 
 
 
@@ -164,5 +196,5 @@ module.exports = {
 
     //TEACHER
     teacherSave,
-    prueba
+    login
 }
