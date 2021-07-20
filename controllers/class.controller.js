@@ -67,10 +67,40 @@ function saveClass (req, res){
 //update
 
 //delete
-
+function deleteClass(req, res){
+    let teacherId = req.params.idT;
+    let classId = req.params.idC;
+    let params = req.body;
+    if(teacherId !=req.user.sub){
+        return res.status(403).send({message: 'No tienes permisos para realizar esta acción'})
+    }else{
+        Class.findById(classId, (err, classFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(classFind){
+                if(classFind.teacher == teacherId){
+                    Class.findByIdAndRemove(classId, (err, classRemoved)=>{
+                        if(err){
+                            res.status(500).send({message: 'ERROR GENERAL', err});
+                        }else if(classRemoved){
+                            res.status(200).send({message: 'Clase eliminada correctamente'});
+                        }else{
+                            res.status(403).send({message: 'no se eliminó la clase'});
+                        }
+                    }) 
+                }else{
+                    res.status(403).send({message: 'No puede editar esta clase'});
+                }
+            }else{
+                res.status(403).send({message: 'No se encontró la clase'});
+            }
+        }) 
+    }
+}
 
 
     module.exports = {
-        saveClass
+        saveClass,
+        deleteClass
     }
     

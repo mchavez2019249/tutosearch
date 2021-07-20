@@ -18,6 +18,8 @@ api.post('/teacherSave', userController.teacherSave);
 
 //CLASS
 api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
+api.delete('/deleteClass/:idT/:idC' ,mdAuth.ensureAuth,classController.deleteClass);
+
 
 
 
