@@ -185,6 +185,49 @@ function studentSave(req, res){
     }
 }
 //----DELETE STUDENT
+function deleteUser(req, res){
+    let userId = req.params.idU;
+    let params = req.body;
+    if(userId !=req.user.sub){
+        return res.status(403).send({message: 'No tienes permisos para realizar esta acción'})
+    }else{
+        User.findById(userId, (err, userFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL',err})
+            }else if(userFind){
+                if(userFind.role == 'ROLE_ADMIN'){
+                    res.status(403).send({message: 'No se puede eliminar un usuario administrador'})
+                }else{
+                    if(params.password){
+                        bcrypt.compare(params.password, userFind.password, (err, passwordCheck)=>{
+                            if(err){
+                                res.status(500).send({message: 'ERROR GENERAL',err})
+                            }else if(passwordCheck){
+                                    User.findByIdAndRemove(userId, (err, userFind)=>{
+                                        if(err){
+                                            res.status(500).send({message: 'ERROR GENERAL',err})
+                                        }else if(userFind){
+                                            res.status(200).send({message: 'Eliminado exitosamente', userRemoved:userFind})
+                                        }else{
+                                            res.status(403).send({message: 'Error al eliminar'})
+                                        }
+                                    })
+                            }else{
+                                res.status(403).send({message: 'Contraseña incorrecta'})
+                            }
+                        })
+                    }else{
+                        res.status(200).send({message:'Ingrese la contraseña del usuario para eliminar'})
+                    }
+                }
+                
+            }else{
+                res.status(403).send({message: 'Usuario inexistente'})
+            }
+
+        })
+    }
+}
 //----SEARCH STUDENT
 function searchStudents(req, res){
     var params = req.body;
@@ -312,4 +355,8 @@ module.exports = {
     getTeachers,
     searchStudents,
     searchTeachers,
+    login,
+    deleteUser
+
 }
+
