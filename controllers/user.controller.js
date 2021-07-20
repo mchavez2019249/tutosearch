@@ -351,7 +351,7 @@ function inscription (req,res){
             if(err){
                 res.status(500).send({message: 'ERROR GENERAL', err});
             }else if(classFind){
-                Class.findOneAndUpdate(classId, {$push:{student: studentId}}, {new: true}, (err, pushStudent)=>{
+                Class.findByIdAndUpdate(classId, {$push:{student: studentId}}, {new: true}, (err, pushStudent)=>{
                     if(err){
                         res.status(500).send({message: 'Error al inscribirse al curso', err});
                     }else if(pushStudent){
