@@ -84,8 +84,61 @@ function login(req, res){
     }
 }
 
-//--------STUDENT------------
+//UPDATE
+function updateUser(req, res){
+    let userId = req.params.idU;
+    let update = req.body;
 
+    if(userId != req.user.sub){
+        return res.status(401).send({message: 'No tienes permiso para realizar esta acicón'});
+    }else{
+        if(update.password || update.role){
+            return res.status(401).send({message: 'No puedes actualizar la contraseña ni el rol desde esta función'});
+        }else{
+            if(update.username){
+                User.findOne({username: update.username.toLowerCase()}, (err, userFind)=>{
+                    if(err){
+                        return res.status(500).send({message: 'ERROR GENERAL', err});
+                    }else if(userFind){
+                        if(userFind._id == req.user.sub){
+                            User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated)=>{
+                                if(err){
+                                    return res.status(500).send({message: 'ERROR GENERAL AL INTENTAR ACTUALIZAR', err});
+                                }else if(userUpdated){
+                                    return res.send({message: 'Usuario actualizado: ', userUpdated});
+                                }else{
+                                    return res.send({message: 'No se pudo actualizar tu usuario'})
+                                }
+                            })
+                        }else{
+                            return res.send({message: 'Nombre de usuario ya en uso'});
+                        }
+                    }else{
+                        User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
+                            if(err){
+                                return res.status(500).send({message: 'ERROR GENERAL AL INTENTAR ACTUALIZAR', err});
+                            }else if(userUpdated){
+                                return res.send({message: 'Usuario actualizado: ', userUpdated});
+                            }else{
+                                return res.send({message: 'No se pudo actualizar tu usuario'})
+                            }
+                        })
+                    }
+                })
+            }else{
+                User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated)=>{
+                    if(err){
+                        return res.status(500).send({message: 'ERROR GENERAL AL INTENTAR ACTUALIZAR', err});
+                    }else if(userUpdated){
+                        return res.send({message: 'Usuario Actualizado: ', userUpdated});
+                    }else{
+                        return res.send({message: 'No se pudo actualizar tu usuario'});
+                    }
+                })
+            }
+        }
+    }
+}
 
 //--------STUDENT------------
 
@@ -131,8 +184,6 @@ function studentSave(req, res){
         return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación del usuario'})
     }
 }
-
-//----UPDATE STUDENT
 //----DELETE STUDENT
 //----SEARCH STUDENT
 //----GET STUDENTS
@@ -180,8 +231,7 @@ function teacherSave(req, res){
     }else{
         return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación del usuario'})
     }
-}  
-//----UPDATE TEACHER
+} 
 //----DELETE TEACHER
 //----SEARCH TEACHER
 //----GET TEACHERS
@@ -196,5 +246,8 @@ module.exports = {
 
     //TEACHER
     teacherSave,
-    login
+
+
+    login,
+    updateUser
 }
