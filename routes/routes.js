@@ -15,7 +15,7 @@ api.delete('/deleteUser/:idU', mdAuth.ensureAuth, userController.deleteUser);
 api.post('/studentSave', userController.studentSave);
 api.get('/getstudents', userController.getStudents);
 api.post('/searchStudent', userController.searchStudents);
-
+api.put('/inscription/:idS/:idC', mdAuth.ensureAuth,userController.inscription);
 //TEACHER
 api.post('/teacherSave', userController.teacherSave);
 api.get('getTeachers', userController.getTeachers);
