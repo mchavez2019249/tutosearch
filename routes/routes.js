@@ -3,13 +3,17 @@ var express = require('express');
 var api = express.Router();
 var mdAuth = require('../middlewares/authenticated'); 
 var connectMultiparty = require('connect-multiparty');
+var userController = require('../controllers/user.controller');
+
 //var mdUpload = connectMultiparty({ uploadDir: './uploads/users'});
 
 
+api.get('/prueba', userController.prueba);
 
 //STUDENT
-
+api.post('/studentSave', userController.studentSave);
 //TEACHER
+api.post('/teacherSave', userController.teacherSave);
 
 //CLASS
 

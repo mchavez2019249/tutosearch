@@ -49,13 +49,16 @@ function createInit(req,res){
     })
 }
 
-<<<<<<< Updated upstream
+function prueba(req, res){
+    res.status(200).send({message: 'Todo correcto'})
+}
+
 //LOGIN
 
-=======
->>>>>>> Stashed changes
+
 //--------STUDENT------------
-//SAVE STUDENT
+
+//----SAVE STUDENT
 function studentSave(req, res){
     var user = new User();
     var params = req.body;
@@ -75,6 +78,7 @@ function studentSave(req, res){
                         user.lastname = params.lastname;
                         user.username = params.username;
                         user.password = passwordHash;
+                        user.phone = params.phone;
                         user.role = "ROLE_STUDENT";
                         user.save((err, userSaved)=>{
                             if(err){
@@ -97,10 +101,14 @@ function studentSave(req, res){
     }
 }
 
-
+//----UPDATE STUDENT
+//----DELETE STUDENT
+//----SEARCH STUDENT
+//----GET STUDENTS
 
 //--------TEACHER------------
-//SAVE TEACHER
+
+//----SAVE TEACHER
 function teacherSave(req, res){
     var user = new User();
     var params = req.body;
@@ -120,6 +128,7 @@ function teacherSave(req, res){
                         user.lastname = params.lastname;
                         user.username = params.username;
                         user.password = passwordHash;
+                        user.phone = params.phone;
                         user.role = "ROLE_TEACHER";
                         user.save((err, userSaved)=>{
                             if(err){
@@ -141,29 +150,19 @@ function teacherSave(req, res){
         return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación del usuario'})
     }
 }
-
-
-
-
-<<<<<<< Updated upstream
-//----SAVE STUDENT
-//----UPDATE STUDENT
-//----DELETE STUDENT
-//----SEARCH STUDENT
-//----GET STUDENTS
-
-//--------TEACHER------------
-
-//----SAVE TEACHER
 //----UPDATE TEACHER
 //----DELETE TEACHER
 //----SEARCH TEACHER
 //----GET TEACHERS
-=======
+
+
+
 module.exports = {
     createInit,
     //STUDENT
     studentSave,
-    teacherSave
+
+    //TEACHER
+    teacherSave,
+    prueba
 }
->>>>>>> Stashed changes
