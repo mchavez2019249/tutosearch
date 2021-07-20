@@ -25,6 +25,8 @@ api.post('/searchTacher', userController.searchTeachers);
 api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
 api.delete('/deleteClass/:idT/:idC' ,mdAuth.ensureAuth,classController.deleteClass);
 api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass);
+api.get('/listClassByS/:idS', classController.listClassByS);
+api.get('/listClassByT/:idT', classController.listClassByT);
 
 module.exports = api;
 
