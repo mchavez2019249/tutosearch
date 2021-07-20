@@ -13,25 +13,18 @@ api.post('/login', userController.login);
 api.delete('/deleteUser/:idU', mdAuth.ensureAuth, userController.deleteUser);
 //STUDENT
 api.post('/studentSave', userController.studentSave);
+api.get('/getstudents', userController.getStudents);
+api.post('/searchStudent', userController.searchStudents);
+
 //TEACHER
 api.post('/teacherSave', userController.teacherSave);
+api.get('getTeachers', userController.getTeachers);
+api.post('/searchTacher', userController.searchTeachers);
 
 //CLASS
 api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
 api.delete('/deleteClass/:idT/:idC' ,mdAuth.ensureAuth,classController.deleteClass);
-
-
-
-
-api.get('getTeachers', userController.getTeachers);
-
-
-api.get('/getstudents', userController.getStudents);
-
-
-api.post('/searchStudent', userController.searchStudents);
-
-api.post('/searchTacher', userController.searchTeachers);
+api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass);
 
 module.exports = api;
 

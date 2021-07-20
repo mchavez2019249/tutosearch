@@ -7,6 +7,7 @@ var jwt = require('../services/jwt');
 var fs = require('fs');
 var path = require('path');
 
+//save
 function saveClass (req, res){
     let userId = req.params.id;  
     var clas = new Class();
@@ -48,9 +49,9 @@ function saveClass (req, res){
                                 res.status(401).send({message: 'No se pudo registrar la materia'})
                                 }
                                })                      
-                            }else{
+                                }else{
                                 res.status(401).send({message: 'No tiene autorización para registrar una materia'})
-                            }
+                                }
 
                         }else{
                             res.status(500).send({message:'Usuario no encontrado'})
@@ -65,6 +66,50 @@ function saveClass (req, res){
 }
 
 //update
+function updateClass(req, res){
+    let userId = req.params.idU;
+    let classId = req.params.idC;
+    let update = req.body;
+    if(userId != req.user.sub){
+        return res.status(404).send({message: 'No tienes permiso para realizar esta acción'});
+    }else{
+        if(update.name){
+            User.findById(userId, (err, userFind)=>{
+                if(err){
+                    return res.status(500).send({message: 'ERROR GENERAL', err});
+                }else if(userFind){
+                    Class.findById(classId,(err, classFind)=>{
+                        if (err) {
+                            return res.status(500).send({message: 'ERROR GENERAL AL ACTUALIZAR LA MATERIA'});
+                        }else if (classFind) {
+                            if (classFind.admin == userId || userFind.role == 'ROLE_TEACHER') {
+                                Class.findByIdAndUpdate(classId, update, {new: true}, (err, updateClass)=>{
+                                    if(err){
+                                        return res.status(500).send({message: 'ERROR GENERAL AL ACTUALIZAR LA MATERIA'});
+                                    }else if(updateClass){
+                                        return res.send({message: 'Materia actualizada con éxito', updateClass});
+                                    }else{
+                                        return res.status(401).send({message: 'No se pudo actualizar la materia'});
+                                    }
+                                })
+                            }else{
+                                return res.status(401).send({message: 'No tiene autorización para actualizar esta materia'});
+                            }
+                        }else{
+                            return res.status(401).send({message: 'No se pudo encontrar la materia solicitada'});
+                        }
+                    })
+                   
+                }else{
+                    return res.status(404).send({message: 'Usuario inexistente'});
+                }
+            }) 
+        }else{
+            return res.status(404).send({message: 'Por favor ingresa los datos mínimos para actualizar la materia'});
+        }       
+    }
+}
+
 
 //delete
 function deleteClass(req, res){
@@ -101,6 +146,7 @@ function deleteClass(req, res){
 
     module.exports = {
         saveClass,
-        deleteClass
+        deleteClass,
+        updateClass
     }
     
