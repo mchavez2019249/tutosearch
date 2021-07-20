@@ -9,7 +9,6 @@ mongoose.connect('mongodb://localhost:27017/tutoSearchDB', {useNewUrlParser: tru
     .then(()=>{
         console.log('Conectado a BD');
         //userInit.createInit();
-       // userInit.createInitAdminH();
         app.listen(port, ()=>{
             console.log('Servidor corriendo sin problemas')
         })

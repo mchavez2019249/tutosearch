@@ -48,6 +48,21 @@ function createInit(req,res){
             }
     })
 }
+
+//LOGIN
+
 //--------STUDENT------------
 
+//----SAVE STUDENT
+//----UPDATE STUDENT
+//----DELETE STUDENT
+//----SEARCH STUDENT
+//----GET STUDENTS
+
 //--------TEACHER------------
+
+//----SAVE TEACHER
+//----UPDATE TEACHER
+//----DELETE TEACHER
+//----SEARCH TEACHER
+//----GET TEACHERS
