@@ -1,18 +1,20 @@
 'use strict'
-
+var routes = require('./routes/routes.js');
 var express = require('express');
-//var userController = require('../controllers/user.controller');
-const { ensureAuth } = require('../middlewares/authenticated');
-var api = express.Router();
-//var mdAuth = require('../middlewares/authenticated');
-var connectMultiparty = require('connect-multiparty');
-//var mdUpload = connectMultiparty({ uploadDir: './uploads/users'});
-var connect = require('connect-multiparty');
+var bodyParser = require('body-parser');
 
-//USUARIOS
+var app = express();
 
-//TUTOR 
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
-//ESTUDIANTE
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
-module.exports = api;
+//app.use('/api', routes);
+module.exports = app;
