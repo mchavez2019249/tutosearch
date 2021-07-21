@@ -10,7 +10,8 @@ var classController = require('../controllers/class.controller');
 
 
 api.post('/login', userController.login);
-api.delete('/deleteUser/:idU', mdAuth.ensureAuth, userController.deleteUser);
+api.put('/deleteUser/:idU', mdAuth.ensureAuth, userController.deleteUser);
+api.put('/updateUser/:idU', mdAuth.ensureAuth, userController.updateUser);
 //STUDENT
 api.post('/studentSave', userController.studentSave);
 api.get('/getstudents', userController.getStudents);
