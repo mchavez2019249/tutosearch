@@ -7,6 +7,10 @@ var classSchema = Schema({
     description: String,
     teacher: {type: Schema.ObjectId, ref: 'user'},
     student: [{type: Schema.ObjectId, ref: 'user'}],
-
+    comments: [{
+        title: String,
+        comm: String,
+        link: String
+    }]
 })
 module.exports = mongoose.model('class', classSchema);

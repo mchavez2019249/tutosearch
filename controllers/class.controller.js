@@ -2,6 +2,7 @@
 
 var User = require('../models/user.model');
 var Class = require('../models/class.model');
+var Comment = require('../models/comment.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
 var fs = require('fs');
@@ -170,11 +171,159 @@ function listClassByS(req, res){
         }
     })
 }
+
+
+//COMMENT
+//SAVE COMMENT
+function saveComment(req, res){
+    var comment = new Comment();
+    let userId = req.params.idU;
+    let commentId = req.params.idC;
+    let params = req.body;
+    if(userId !=req.user.sub){
+        res.status(403).send({message: 'No puede acceder a esta funcion'})
+    }else{
+       User.findById(userId, (err, userFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err})
+            }else if (userFind){
+                if (userFind.role == 'ROLE_TEACHER') {
+                if(params.title && params.comm){
+                    comment.title= params.title;
+                    comment.comm = params.comm;
+                    comment.link = params.link;
+                    Class.findByIdAndUpdate(commentId, {$push: {comments: comment}}, {new: true}, (err, comentSaved)=>{
+                        if(err){
+                            res.status(500).send({message: 'ERROR GENERAL', err})
+                        }else if(comentSaved){
+                            res.status(200).send({message: 'Comentario realizado', comentSaved});
+                        }else{
+                            res.status(418).send({message: 'Comentario no agregado'});
+                        }
+                    })
+                }else{
+                    res.status(404).send({message: 'Ingrese los datos mínimos, título y comentario'})
+                } 
+                }else{
+                    res.status(404).send({message: 'No tienes permisos para agregar un comentario'})
+                } 
+
+            }else{
+                res.status(200).send({message: 'No hay ningun registro'})
+            }
+        })
+    }
+}
+
+
+//DELETE
+function deleteComment(req, res){
+    let userId = req.params.idU;
+    let classId = req.params.idCl;
+    let commentId = req.params.idCo ;
+    let update = req.body;
+    if(userId !=req.user.sub){
+        res.status(403).send({message: 'No puede acceder a esta funcion'})
+    }else{
+        User.findById(userId, (err, userFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err})
+            }else if (userFind){
+                if (userFind.role == 'ROLE_TEACHER') {
+                Class.findOneAndUpdate({_id: classId, 'comments._id':commentId}, 
+                    {$pull:{comments:{_id : commentId}}}, {new: true}, (err, commentRemoved)=>{
+                        if(err){
+                            res.status(500).send({message: 'ERROR GENERAL', err})
+                        }else if(commentRemoved){
+                            res.status(200).send({message: 'El commentario fue eliminado, estos son tus comentarios por ahora:', comments: commentRemoved.comments})
+                        }else{
+                            res.status(200).send({message: 'El comentario no fue encontrado o ya eliminado'})
+                        }  
+                })
+            }else{
+                res.status(404).send({message: 'No tienes permisos para eliminar un comentario'})
+            } 
+            }else{
+                res.status(200).send({message: 'No hay ningun registro'})
+            }
+        })
+    }
+}
+
+
+//UPDATE 
+function updateComment(req, res){
+    let userId = req.params.idU;
+    let classId = req.params.idCl;
+    let commentId = req.params.idCo;
+    let update = req.body;
+    if(userId !=req.user.sub){
+        res.status(403).send({message: 'No puede acceder a esta funcion'})
+    }else{
+        User.findById(userId, (err, userFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err})
+            }else if (userFind){
+                if (userFind.role == 'ROLE_TEACHER') {
+        Class.findById(classId, (err, classFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(classFind){
+                Class.findOneAndUpdate({_id:classId, 'comments._id': commentId},
+                {'comments.$.title': update.title, 
+                'comments.$.comm': update.comm,
+                'comments.$.link': update.link}, {new:true}, (err, commentUpdated)=>{
+                    if(err){
+                        res.status(500).send({message: 'ERROR GENERAL', err});
+                    }else if(commentUpdated){
+                        res.status(200).send({message: 'El comentario se actualizó:', commentUpdated});
+                    }else{
+                        res.status(404).send({message: 'El comentario no fue actualizado'});
+                    }
+                })
+            }else{
+                res.status(200).send({message: 'El usuario que ingresaste no existe'});
+            }
+        })
+                }else{
+                res.status(404).send({message: 'No tienes permisos para eliminar un comentario'})
+                }        
+            }else{
+                res.status(200).send({message: 'No existe ningún comentario'})
+            }
+        })
+    }   
+}
+
+
+//GET   
+function getComments(req, res){
+    let userId = req.params.idU;
+    let classId = req.params.idC;
+    if(userId !=req.user.sub){
+        res.status(403).send({message: 'No puede acceder a esta funcion'})
+    }else{
+    Class.findById(classId, (err, commentsFind)=>{
+        if(err){
+            res.status(500).send({message: 'ERROR GENERAL', err});
+        }else if(commentsFind){
+            res.status(200).send({message: 'Los comentarios son los siguientes: ', comments: commentsFind.comments});
+        }else{
+            res.status(418).send({message: 'No existen comentarios para mostrar', err});
+        }
+    })
+}
+}
+
     module.exports = {
         saveClass,
         deleteClass,
         updateClass,
         listClassByS,
-        listClassByT
+        listClassByT,
+        saveComment,
+        deleteComment,
+        updateComment,
+        getComments
     }
     

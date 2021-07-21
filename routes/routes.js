@@ -28,10 +28,21 @@ api.post('/searchTacher', userController.searchTeachers);
 
 //CLASS
 api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
-api.delete('/deleteClass/:idT/:idC' ,mdAuth.ensureAuth,classController.deleteClass);
+api.delete('/deleteClass/:idT/:idC', mdAuth.ensureAuth,classController.deleteClass);
 api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass);
 api.get('/listClassByS/:idS', classController.listClassByS);
 api.get('/listClassByT/:idT', classController.listClassByT);
+
+//COMMENT
+api.put('/saveComment/:idU/:idC', mdAuth.ensureAuth, classController.saveComment);
+api.delete('/deleteComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.deleteComment);
+api.put('/updateComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.updateComment);
+api.get('/getComments/:idU/:idC', mdAuth.ensureAuth, classController.getComments);
+
+
+
+
+
 
 module.exports = api;
 

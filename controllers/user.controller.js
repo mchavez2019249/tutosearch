@@ -393,6 +393,8 @@ function getTeachers(req, res){
 }) 
 }
 
+
+//----INSCRIPTION
 function inscription (req,res){
     var studentId = req.params.idS;
     var classId = req.params.idC;
@@ -419,15 +421,13 @@ function inscription (req,res){
     }
 }
 
-
-
-
 module.exports = {
     createInit,
     uploadImage,
     getImage,
     //STUDENT
     studentSave,
+    inscription,
     getStudents,
     //TEACHER
     teacherSave,
@@ -437,8 +437,7 @@ module.exports = {
     searchStudents,
     searchTeachers,
     login,
-    deleteUser,
-    inscription
+    deleteUser
 
 }
 
