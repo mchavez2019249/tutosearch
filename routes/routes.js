@@ -16,7 +16,7 @@ api.put('/updateUser/:idU', mdAuth.ensureAuth, userController.updateUser);
 api.post('/studentSave', userController.studentSave);
 api.get('/getstudents', userController.getStudents);
 api.post('/searchStudent', userController.searchStudents);
-
+api.put('/inscription/:idS/:idC', mdAuth.ensureAuth,userController.inscription);
 //TEACHER
 api.post('/teacherSave', userController.teacherSave);
 api.get('getTeachers', userController.getTeachers);
@@ -26,6 +26,8 @@ api.post('/searchTacher', userController.searchTeachers);
 api.post('/saveClass/:id' ,mdAuth.ensureAuth,classController.saveClass);
 api.delete('/deleteClass/:idT/:idC' ,mdAuth.ensureAuth,classController.deleteClass);
 api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass);
+api.get('/listClassByS/:idS', classController.listClassByS);
+api.get('/listClassByT/:idT', classController.listClassByT);
 
 module.exports = api;
 

@@ -1,6 +1,7 @@
 'use strict'
 
 var User = require('../models/user.model');
+var Class = require('../models/class.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
 var fs = require('fs');
@@ -340,6 +341,32 @@ function getTeachers(req, res){
 }) 
 }
 
+function inscription (req,res){
+    var studentId = req.params.idS;
+    var classId = req.params.idC;
+    if(studentId != req.user.sub){
+        res.status(403).send({message: 'No puede acceder a esta funcion'});
+    }else{
+        Class.findById(classId, (err, classFind)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(classFind){
+                Class.findByIdAndUpdate(classId, {$push:{student: studentId}}, {new: true}, (err, pushStudent)=>{
+                    if(err){
+                        res.status(500).send({message: 'Error al inscribirse al curso', err});
+                    }else if(pushStudent){
+                        return res.status(200).send({message: 'Inscripción completada', pushStudent});
+                    }else{
+                        res.status(200).send({message: 'no seteado pero en la base de datos'});
+                    }
+                }) 
+            }else{
+                res.status(403).send({message: 'Clase no encontrada.'});
+            }
+        })
+    }
+}
+
 
 
 
@@ -356,7 +383,8 @@ module.exports = {
     searchStudents,
     searchTeachers,
     login,
-    deleteUser
+    deleteUser,
+    inscription
 
 }
 
