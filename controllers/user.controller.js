@@ -141,6 +141,58 @@ function updateUser(req, res){
     }
 }
 
+//UPLOAD IMAGE
+function uploadImage(req, res){
+    var userId = req.params.idU;
+    var fileName = 'Sin Imagen';
+    if(userId != req.user.sub){
+        res.status(403).send({message: 'No tienes permiso para realizar esta acción'});
+    }else{
+        if(req.files){
+            var filePath = req.files.image.path;
+            var fileSplit = filePath.split('\\');
+            var fileName  = fileSplit[2];
+            var ext = fileName.split('.');
+            var fileExt = ext[1];
+            if(fileExt == 'png' ||
+                fileExt == 'jpg' ||
+                fileExt == 'jpeg' ||
+                fileExt == 'gif'){
+                    User.findByIdAndUpdate(userId, {image: fileName}, {new: true}, (err, userUpdated)=>{
+                        if(err){
+                            return res.status(500).send({message: 'ERROR GENERAL', err});
+                        }else if(userUpdated){
+                            return res.send({user: userUpdated, userImage: userUpdated.image});
+                        }
+                    })
+                }else{
+                    fs.unlink(filePath, (err)=>{
+                        if(err){
+                            return res.status(500).send({message: 'Error al eliminar y la extensión no es válida', err});
+                        }else{
+                            return res.status(403).send({message: 'Extensión no válida, archivo eliminado'});
+                        }
+                    })
+                }
+        }else{
+            return res.status(404).send({message: 'No has subido una imagen'});
+        }
+    }
+}
+
+function getImage(req, res){
+    var fileName = req.params.fileName;
+    var pathFile = './uploads/user/' + fileName;
+
+    fs.exists(pathFile, (exists)=>{
+        if(exists){
+            return res.sendFile(path.resolve(pathFile))
+        }else{
+           return res.status(404).send({message: 'Imagen inexistente'});
+        }
+    })
+}
+
 //--------STUDENT------------
 
 //SAVE STUDENT
@@ -372,6 +424,8 @@ function inscription (req,res){
 
 module.exports = {
     createInit,
+    uploadImage,
+    getImage,
     //STUDENT
     studentSave,
     getStudents,
