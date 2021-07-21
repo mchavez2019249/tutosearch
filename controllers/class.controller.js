@@ -146,12 +146,12 @@ function deleteClass(req, res){
 
 //LIST CLASS BY TEACHER
 function listClassByT(req, res){
-    Class.find({teacher: req.params.idT}).exec((err, ClassFind)=>{
+    Class.find({teacher: req.params.idT}).exec((err, classFind)=>{
         if(err){
             res.status(500).send({message: 'Error en el servidor'});
-        }else if(ClassFind){
-            console.log(ClassFind)
-            res.send({message: 'Estas son tus cursos: ', ClassF:ClassFind});
+        }else if(classFind){
+            console.log(classFind)
+            res.send({message: 'Estas son tus cursos: ', classF:classFind});
         }else{
             res.status(404).send({message: 'No hay registros'});
         }
@@ -160,12 +160,12 @@ function listClassByT(req, res){
 
 //LIST CLASS BY STUDENT
 function listClassByS(req, res){
-    Class.find({student:{$in :[req.params.idS]}}).exec((err, ClassFind)=>{
+    Class.find({student:{$in :[req.params.idS]}}).exec((err, classFind)=>{
         if(err){
             res.status(500).send({message: 'Error en el servidor'});
-        }else if(ClassFind){
-            console.log(ClassFind)
-            res.send({message: 'Estas son tus cursos: ', ClassF:ClassFind});
+        }else if(classFind){
+            console.log(classFind)
+            res.send({message: 'Estas son tus cursos: ', classFind});
         }else{
             res.status(404).send({message: 'No hay registros'});
         }
