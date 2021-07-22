@@ -23,6 +23,8 @@ api.post('/studentSave', userController.studentSave);
 api.get('/getstudents', userController.getStudents);
 api.post('/searchStudent', userController.searchStudents);
 api.put('/inscription/:idS/:idC', mdAuth.ensureAuth,userController.inscription);
+api.delete('/deleteInscription/:idS/:idC', mdAuth.ensureAuth, userController.deleteInscription);
+
 //TEACHER
 api.post('/teacherSave', userController.teacherSave);
 api.get('getTeachers', userController.getTeachers);
@@ -41,6 +43,9 @@ api.put('/saveComment/:idU/:idC', mdAuth.ensureAuth, classController.saveComment
 api.delete('/deleteComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.deleteComment);
 api.put('/updateComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.updateComment);
 api.get('/getComments/:idU/:idC', mdAuth.ensureAuth, classController.getComments);
+api.put('/uploadImageC/:idU/:idCl/:idC', [mdAuth.ensureAuth, mdUpload], classController.uploadImageC);
+api.get('/getImageC/:fileName', [mdUpload], classController.getImageC);
+
 
 
 

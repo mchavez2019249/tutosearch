@@ -91,7 +91,7 @@ function updateUser(req, res){
     let update = req.body;
 
     if(userId != req.user.sub){
-        return res.status(401).send({message: 'No tienes permiso para realizar esta acicón'});
+        return res.status(401).send({message: 'No tienes permiso para realizar esta acción'});
     }else{
         if(update.password || update.role){
             return res.status(401).send({message: 'No puedes actualizar la contraseña ni el rol desde esta función'});
@@ -433,6 +433,42 @@ function inscription (req,res){
     }
 }
 
+
+//DELETE INSCRIPTION
+function deleteInscription (req, res){
+    let studentId = req.params.idS;
+    let classId = req.params.idC;
+    if(studentId != req.user.sub){
+        res.status(403).send({message: 'No puede acceder a esta funcion'});
+    }else{
+    Class.findById(classId, (err, classFind)=>{
+        if(err){
+           res.status(500).send({message: 'ERROR GENERAL', err})
+        }else if(classFind){
+       Class.findOneAndUpdate({_id: classId, student: studentId},
+           {$pull: {student: studentId}}, {new:true}, (err, inscriptionDeleted)=>{
+               if(err){
+                   return res.status(500).send({message: 'ERROR GENERAL', err})
+               }else if(inscriptionDeleted){
+                   Class.findByIdAndRemove(studentId, (err, inscriptionRemoved)=>{
+                       if(err){
+                           return res.status(500).send({message: 'Error general', err})
+                       }else if(inscriptionRemoved){
+                           return res.send({message: 'La inscripción fue eliminada correctamente', inscriptionDeleted});
+                       }else{
+                           return res.status(404).send({message: 'La inscripción fue eliminada correctamente', inscriptionDeleted})
+                       }
+                   })
+               }else{
+                   return res.status(404).send({message: 'La inscripción no fue encontrada o ya fue eliminada'})
+               }
+           })
+        }else{
+        }
+    })
+}
+}
+
 module.exports = {
     createInit,
     uploadImage,
@@ -451,7 +487,8 @@ module.exports = {
     searchStudents,
     searchTeachers,
     login,
-    deleteUser
+    deleteUser,
+    deleteInscription
 
 }
 
