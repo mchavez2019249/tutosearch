@@ -34,6 +34,7 @@ api.delete('/deleteClass/:idT/:idC', mdAuth.ensureAuth,classController.deleteCla
 api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass);
 api.get('/listClassByS/:idS', classController.listClassByS);
 api.get('/listClassByT/:idT', classController.listClassByT);
+api.get('/allClasses/:idU', mdAuth.ensureAuth, classController.allClasses);
 
 //COMMENT
 api.put('/saveComment/:idU/:idC', mdAuth.ensureAuth, classController.saveComment);

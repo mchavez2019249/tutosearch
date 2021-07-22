@@ -144,6 +144,26 @@ function deleteClass(req, res){
     }
 }
 
+//GET ALL CLASSES
+function allClasses(req, res){
+    let userId = req.params.idU;
+    if(userId !=req.user.sub){
+        return res.status(403).send({message: 'No tienes permisos para realizar esta acción'})
+    }else{
+        Class.find({}, (err, classes)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(classes){
+                res.status(200).send({message: 'Clases disponibles', classes});
+            }else{
+                res.status(403).send({message: 'No se encontraron clases'});
+            }
+        })
+
+    }
+
+}
+
 //LIST CLASS BY TEACHER
 function listClassByT(req, res){
     Class.find({teacher: req.params.idT}).exec((err, classFind)=>{
@@ -324,6 +344,7 @@ function getComments(req, res){
         saveComment,
         deleteComment,
         updateComment,
-        getComments
+        getComments,
+        allClasses
     }
     
