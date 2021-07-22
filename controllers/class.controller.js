@@ -411,11 +411,8 @@ function getImageC(req, res){
         deleteComment,
         updateComment,
         getComments,
-<<<<<<< HEAD
-        allClasses
-=======
+        allClasses,
         uploadImageC,
         getImageC
->>>>>>> master
     }
     
