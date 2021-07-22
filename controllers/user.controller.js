@@ -180,6 +180,18 @@ function uploadImage(req, res){
     }
 }
 
+function getUsers(req, res){
+    User.find({}).exec((err, user)=>{
+        if(err){
+            res.status(500).send({message: 'ERROR GENERAL', err});
+        }else if(user){
+            res.status(200).send({message: 'Usuarios encontrados', users:user});
+        }else{
+            res.status(404).send({message: 'No se encontraron registros'})
+        }
+    })
+}
+
 function getImage(req, res){
     var fileName = req.params.fileName;
     var pathFile = './uploads/user/' + fileName;
@@ -425,6 +437,8 @@ module.exports = {
     createInit,
     uploadImage,
     getImage,
+    //ADMIN
+    getUsers,
     //STUDENT
     studentSave,
     inscription,

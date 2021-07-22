@@ -16,6 +16,8 @@ api.put('/updateUser/:idU', mdAuth.ensureAuth, userController.updateUser);
 api.put('/uploadImage/:idU', [mdAuth.ensureAuth, mdUpload], userController.uploadImage);
 api.get('/getImage/:fileName', [mdUpload], userController.getImage);
 
+api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.getUsers);
+
 //STUDENT
 api.post('/studentSave', userController.studentSave);
 api.get('/getstudents', userController.getStudents);
