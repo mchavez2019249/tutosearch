@@ -18,11 +18,15 @@ api.get('/getImage/:fileName', [mdUpload], userController.getImage);
 //ADMIN
 api.delete('/deleteuserByAdmin/:idU/:idAdmin', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.deleteUserByAdmin);
 
+api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.getUsers);
+
 //STUDENT
 api.post('/studentSave', userController.studentSave);
 api.get('/getstudents', userController.getStudents);
 api.post('/searchStudent', userController.searchStudents);
 api.put('/inscription/:idS/:idC', mdAuth.ensureAuth,userController.inscription);
+api.delete('/deleteInscription/:idS/:idC', mdAuth.ensureAuth, userController.deleteInscription);
+
 //TEACHER
 api.post('/teacherSave', userController.teacherSave);
 api.get('getTeachers', userController.getTeachers);
@@ -34,12 +38,16 @@ api.delete('/deleteClass/:idT/:idC', mdAuth.ensureAuth,classController.deleteCla
 api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass);
 api.get('/listClassByS/:idS', classController.listClassByS);
 api.get('/listClassByT/:idT', classController.listClassByT);
+api.get('/allClasses/:idU', mdAuth.ensureAuth, classController.allClasses);
 
 //COMMENT
 api.put('/saveComment/:idU/:idC', mdAuth.ensureAuth, classController.saveComment);
 api.delete('/deleteComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.deleteComment);
 api.put('/updateComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.updateComment);
 api.get('/getComments/:idU/:idC', mdAuth.ensureAuth, classController.getComments);
+api.put('/uploadImageC/:idU/:idCl/:idC', [mdAuth.ensureAuth, mdUpload], classController.uploadImageC);
+api.get('/getImageC/:fileName', [mdUpload], classController.getImageC);
+
 
 
 

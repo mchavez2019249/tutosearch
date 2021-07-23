@@ -144,14 +144,34 @@ function deleteClass(req, res){
     }
 }
 
+//GET ALL CLASSES
+function allClasses(req, res){
+    let userId = req.params.idU;
+    if(userId !=req.user.sub){
+        return res.status(403).send({message: 'No tienes permisos para realizar esta acción'})
+    }else{
+        Class.find({}, (err, classes)=>{
+            if(err){
+                res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(classes){
+                res.status(200).send({message: 'Clases disponibles', classes});
+            }else{
+                res.status(403).send({message: 'No se encontraron clases'});
+            }
+        })
+
+    }
+
+}
+
 //LIST CLASS BY TEACHER
 function listClassByT(req, res){
-    Class.find({teacher: req.params.idT}).exec((err, ClassFind)=>{
+    Class.find({teacher: req.params.idT}).exec((err, classFind)=>{
         if(err){
             res.status(500).send({message: 'Error en el servidor'});
-        }else if(ClassFind){
-            console.log(ClassFind)
-            res.send({message: 'Estas son tus cursos: ', ClassF:ClassFind});
+        }else if(classFind){
+            console.log(classFind)
+            res.send({message: 'Estas son tus cursos: ', classF:classFind});
         }else{
             res.status(404).send({message: 'No hay registros'});
         }
@@ -160,12 +180,12 @@ function listClassByT(req, res){
 
 //LIST CLASS BY STUDENT
 function listClassByS(req, res){
-    Class.find({student:{$in :[req.params.idS]}}).exec((err, ClassFind)=>{
+    Class.find({student:{$in :[req.params.idS]}}).exec((err, classFind)=>{
         if(err){
             res.status(500).send({message: 'Error en el servidor'});
-        }else if(ClassFind){
-            console.log(ClassFind)
-            res.send({message: 'Estas son tus cursos: ', ClassF:ClassFind});
+        }else if(classFind){
+            console.log(classFind)
+            res.send({message: 'Estas son tus cursos: ', classFind});
         }else{
             res.status(404).send({message: 'No hay registros'});
         }
@@ -191,7 +211,11 @@ function saveComment(req, res){
                 if(params.title && params.comm){
                     comment.title= params.title;
                     comment.comm = params.comm;
-                    comment.link = params.link;
+                    comment.link1 = params.link1;
+                    comment.link2 = params.link2;
+                    comment.link3 = params.link3;
+                    comment.link4 = params.link4;
+                    comment.link5 = params.link5;
                     Class.findByIdAndUpdate(commentId, {$push: {comments: comment}}, {new: true}, (err, comentSaved)=>{
                         if(err){
                             res.status(500).send({message: 'ERROR GENERAL', err})
@@ -315,6 +339,68 @@ function getComments(req, res){
 }
 }
 
+
+
+//UPLOAD DOCUMENTS
+function uploadImageC(req, res){
+    var comment = new Comment();
+    var userId = req.params.idU;
+    var classId = req.params.idC;
+    var commentId = req.params.idCl;
+    var fileName = 'Sin Imagen';
+    if(userId != req.user.sub){
+        res.status(403).send({message: 'No tienes permiso para realizar esta acción'});
+    }else{
+        if(req.files){
+            var filePath = req.files.image.path;
+            var fileSplit = filePath.split('\\');
+            var fileName  = fileSplit[2];
+            var ext = fileName.split('.');
+            var fileExt = ext[1];
+            if(fileExt == 'png' ||
+                fileExt == 'jpg' ||
+                fileExt == 'jpeg' ||
+                fileExt == 'gif' ||
+                fileExt == 'pdf'){
+                    comment.image = fileName
+
+                    Class.findByIdAndUpdate(classId, [{$push:{comments: comment.image}}], {new: true}, (err, commentUpdated)=>{
+                        if(err){
+                            return res.status(500).send({message: 'ERROR GENERAL', err});
+                        }else if(commentUpdated){
+                            return res.send({message: 'prueba prueba' });
+                        }else{
+                            return res.send({message: 'Guardado, pero no seteado' });
+                        }
+                    })
+                }else{
+                    fs.unlink(filePath, (err)=>{
+                        if(err){
+                            return res.status(500).send({message: 'Error al eliminar y la extensión no es válida', err});
+                        }else{
+                            return res.status(403).send({message: 'Extensión no válida, archivo eliminado'});
+                        }
+                    })
+                }
+        }else{
+            return res.status(404).send({message: 'No has subido una imagen'});
+        }
+    }
+}
+
+function getImageC(req, res){
+    var fileName = req.params.fileName;
+    var pathFile = './uploads/user/' + fileName;
+
+    fs.exists(pathFile, (exists)=>{
+        if(exists){
+            return res.sendFile(path.resolve(pathFile))
+        }else{
+           return res.status(404).send({message: 'Imagen inexistente'});
+        }
+    })
+}
+
     module.exports = {
         saveClass,
         deleteClass,
@@ -324,6 +410,9 @@ function getComments(req, res){
         saveComment,
         deleteComment,
         updateComment,
-        getComments
+        getComments,
+        allClasses,
+        uploadImageC,
+        getImageC
     }
     
