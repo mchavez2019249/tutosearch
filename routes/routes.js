@@ -15,6 +15,8 @@ api.put('/deleteUser/:idU', mdAuth.ensureAuth, userController.deleteUser);
 api.put('/updateUser/:idU', mdAuth.ensureAuth, userController.updateUser);
 api.put('/uploadImage/:idU', [mdAuth.ensureAuth, mdUpload], userController.uploadImage);
 api.get('/getImage/:fileName', [mdUpload], userController.getImage);
+//ADMIN
+api.delete('/deleteuserByAdmin/:idU/:idAdmin', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.deleteUserByAdmin);
 
 //STUDENT
 api.post('/studentSave', userController.studentSave);

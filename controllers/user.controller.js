@@ -420,6 +420,39 @@ function inscription (req,res){
         })
     }
 }
+/*DELETE USER BY ADMIN*/
+function deleteUserByAdmin(req, res){
+    let userId = req.params.idU;
+    let params = req.body;
+    let adminId = req.params.idAdmin;
+    if(adminId !=req.user.sub){
+        return res.status(403).send({message: 'No tienes permisos para realizar esta acción'})
+    }else{
+        User.findById(userId, (err, userFind)=>{
+            if(err){
+                res.status(500).send({message: 'Error general'})
+            }else if(userFind){
+                if(userFind.role == 'ROLE_ADMIN'){
+                    res.status(403).send({message: 'No se puede eliminar un usuario administrador'})
+                }else{
+                    User.findByIdAndRemove(userId, (err, userFind)=>{
+                        if(err){
+                            res.status(500).send({message: 'Error general'})
+                        }else if(userFind){
+                            res.status(200).send({message: 'Eliminado exitosamente', userRemoved:userFind})
+                        }else{
+                            res.status(403).send({message: 'Error al eliminar'})
+                        }
+                    })   
+                }
+                
+            }else{
+                res.status(403).send({message: 'Usuario inexistente'})
+            }
+
+        })
+    }
+}
 
 module.exports = {
     createInit,
@@ -437,7 +470,8 @@ module.exports = {
     searchStudents,
     searchTeachers,
     login,
-    deleteUser
-
+    deleteUser,
+    //ADMIN
+    deleteUserByAdmin
 }
 
