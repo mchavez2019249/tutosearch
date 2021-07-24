@@ -45,7 +45,7 @@ api.put('/saveComment/:idU/:idC', mdAuth.ensureAuth, classController.saveComment
 api.delete('/deleteComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.deleteComment);
 api.put('/updateComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.updateComment);
 api.get('/getComments/:idU/:idC', mdAuth.ensureAuth, classController.getComments);
-api.put('/uploadImageC/:idU/:idCl/:idC', [mdAuth.ensureAuth, mdUpload], classController.uploadImageC);
+api.put('/uploadImageC/:idU/:idC', [mdAuth.ensureAuth, mdUpload], classController.uploadImageC);
 api.get('/getImageC/:fileName', [mdUpload], classController.getImageC);
 
 

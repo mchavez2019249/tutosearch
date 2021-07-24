@@ -3,6 +3,7 @@
 var User = require('../models/user.model');
 var Class = require('../models/class.model');
 var Comment = require('../models/comment.model');
+var File = require('../models/file.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
 var fs = require('fs');
@@ -360,19 +361,33 @@ function uploadImageC(req, res){
             if(fileExt == 'png' ||
                 fileExt == 'jpg' ||
                 fileExt == 'jpeg' ||
-                fileExt == 'gif' ||
-                fileExt == 'pdf'){
-                    comment.image = fileName
-
-                    Class.findByIdAndUpdate(classId, [{$push:{comments: comment.image}}], {new: true}, (err, commentUpdated)=>{
+                fileExt == 'gif' || 
+                fileExt == 'pdf' ||
+                fileExt == 'docx' ||
+                fileExt == 'pptx' ||
+                fileExt == 'xlsx' ||
+                fileExt == 'txt'){
+                    
+                    
+                    Class.findById(classId, (err, classFind)=>{
                         if(err){
-                            return res.status(500).send({message: 'ERROR GENERAL', err});
-                        }else if(commentUpdated){
-                            return res.send({message: 'prueba prueba' });
+                            res.status(500).send({message:'ERROR GENERAL', err})
+                        }else if(classFind){
+                            
+                            Class.findByIdAndUpdate(classId, {$push:{files: fileName}}, {new: true}, (err, commentUpdated)=>{
+                                if(err){
+                                    return res.status(500).send({message: 'ERROR GENERAL', err});
+                                }else if(commentUpdated){
+                                    res.send({message:'Guardado prueba', commentUpdated})
+                                }else{
+                                    return res.send({message: 'Guardado, pero no seteado' });
+                                }
+                            })
+                            
                         }else{
-                            return res.send({message: 'Guardado, pero no seteado' });
+                            res.status(500).send({message:'Clase no encontrada'})
                         }
-                    })
+                        })
                 }else{
                     fs.unlink(filePath, (err)=>{
                         if(err){

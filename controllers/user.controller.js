@@ -413,6 +413,12 @@ function inscription (req,res){
     if(studentId != req.user.sub){
         res.status(403).send({message: 'No puede acceder a esta funcion'});
     }else{
+        Class.findOne(({student:studentId, _id:classId}), (err, userFind)=>{
+            if(err){
+                return res.status(500).send({message: 'ERROR GENERAL', err});
+            }else if(userFind){
+                return res.send({message: 'Ya estás inscrito, no puedes hacerlo nuevamente'});
+            }else{
         Class.findById(classId, (err, classFind)=>{
             if(err){
                 res.status(500).send({message: 'ERROR GENERAL', err});
@@ -429,6 +435,8 @@ function inscription (req,res){
             }else{
                 res.status(403).send({message: 'Clase no encontrada.'});
             }
+        })
+    }
         })
     }
 }

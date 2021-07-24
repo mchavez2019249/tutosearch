@@ -15,7 +15,8 @@ var classSchema = Schema({
         link3: String,
         link4: String,
         link5: String,
-        image: String,
-    }]
+    }],
+    files: [
+          ]
 })
 module.exports = mongoose.model('class', classSchema);

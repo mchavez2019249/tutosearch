@@ -10,6 +10,5 @@ var commentSchema = Schema({
     link3: String,
     link4: String,
     link5: String,
-    image: String,
 })
 module.exports = mongoose.model('comment', commentSchema);
