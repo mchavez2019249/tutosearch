@@ -6,7 +6,7 @@ var secretKey = 'TUTOSEARCHG1';
 
 exports.ensureAuth = (req, res, next)=>{
     if(!req.headers.authorization){
-        return res.status(403).send({message: 'La peticion no tiene cabecera de autenticacion'})
+        return res.status(403).send({message: 'La peticion no tiene cabecera de autenticacion.'})
     }else{
         var token = req.headers.authorization.replace(/['"']+/g, '')
         try{
