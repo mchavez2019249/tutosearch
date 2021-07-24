@@ -410,9 +410,6 @@ function getTeachers(req, res){
 function inscription (req,res){
     var studentId = req.params.idS;
     var classId = req.params.idC;
-    if(studentId != req.user.sub){
-        res.status(403).send({message: 'No puede acceder a esta funcion'});
-    }else{
         Class.findOne(({student:studentId, _id:classId}), (err, userFind)=>{
             if(err){
                 return res.status(500).send({message: 'ERROR GENERAL', err});
@@ -438,7 +435,7 @@ function inscription (req,res){
         })
     }
         })
-    }
+    
 }
 /*DELETE USER BY ADMIN*/
 function deleteUserByAdmin(req, res){
