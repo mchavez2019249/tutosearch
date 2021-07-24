@@ -162,7 +162,6 @@ function allClasses(req, res){
         })
 
     }
-
 }
 
 //LIST CLASS BY TEACHER
@@ -341,7 +340,6 @@ function getComments(req, res){
 }
 
 
-
 //UPLOAD DOCUMENTS
 function uploadImageC(req, res){
     var comment = new Comment();
@@ -367,13 +365,10 @@ function uploadImageC(req, res){
                 fileExt == 'pptx' ||
                 fileExt == 'xlsx' ||
                 fileExt == 'txt'){
-                    
-                    
                     Class.findById(classId, (err, classFind)=>{
                         if(err){
                             res.status(500).send({message:'ERROR GENERAL', err})
                         }else if(classFind){
-                            
                             Class.findByIdAndUpdate(classId, {$push:{files: fileName}}, {new: true}, (err, commentUpdated)=>{
                                 if(err){
                                     return res.status(500).send({message: 'ERROR GENERAL', err});
@@ -416,6 +411,21 @@ function getImageC(req, res){
     })
 }
 
+function getFiles(req, res){
+    let classId = req.params.idC;
+    Class.findById(classId,(err, filesFind)=>{
+        if(err){
+            res.status(500).send({message: 'Error general al mostrar los archivos'});
+        }else if(filesFind){
+            res.status(200).send({message: 'Los archivos de la clase son los siguientes: ', archivos: filesFind.files});
+        }else{
+            res.status(418).send({message: 'La clase que ingresaste no fue encontrada', err});
+        }
+    })
+}
+
+
+
     module.exports = {
         saveClass,
         deleteClass,
@@ -428,6 +438,7 @@ function getImageC(req, res){
         getComments,
         allClasses,
         uploadImageC,
-        getImageC
+        getImageC,
+        getFiles
     }
     

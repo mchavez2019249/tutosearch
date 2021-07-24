@@ -49,6 +49,12 @@ api.put('/uploadImageC/:idU/:idC', [mdAuth.ensureAuth, mdUpload], classControlle
 api.get('/getImageC/:fileName', [mdUpload], classController.getImageC);
 
 
+//FILES
+api.put('/uploadImageC/:idU/:idC', [mdAuth.ensureAuth, mdUpload], classController.uploadImageC);
+api.get('/getImageC/:fileName', [mdUpload], classController.getImageC);
+api.get('/getFiles/:idC', mdAuth.ensureAuth, classController.getFiles);
+
+
 
 
 

@@ -437,6 +437,7 @@ function inscription (req,res){
         })
     
 }
+
 /*DELETE USER BY ADMIN*/
 function deleteUserByAdmin(req, res){
     let userId = req.params.idU;
