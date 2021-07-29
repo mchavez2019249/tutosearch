@@ -39,12 +39,13 @@ api.put('/updateClass/:idU/:idC', mdAuth.ensureAuth,classController.updateClass)
 api.get('/listClassByS/:idS', classController.listClassByS);
 api.get('/listClassByT/:idT', classController.listClassByT);
 api.get('/allClasses/:idU', mdAuth.ensureAuth, classController.allClasses);
+api.get('/getClass/:idC', classController.getClass);
 
 //COMMENT
 api.put('/saveComment/:idU/:idC', mdAuth.ensureAuth, classController.saveComment);
 api.delete('/deleteComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.deleteComment);
 api.put('/updateComment/:idU/:idCl/:idCo', mdAuth.ensureAuth, classController.updateComment);
-api.get('/getComments/:idU/:idC', mdAuth.ensureAuth, classController.getComments);
+api.get('/getComments/:idU/:idC', classController.getComments);
 api.put('/uploadImageC/:idU/:idC', [mdAuth.ensureAuth, mdUpload], classController.uploadImageC);
 api.get('/getImageC/:fileName', [mdUpload], classController.getImageC);
 

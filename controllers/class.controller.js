@@ -325,9 +325,6 @@ function updateComment(req, res){
 function getComments(req, res){
     let userId = req.params.idU;
     let classId = req.params.idC;
-    if(userId !=req.user.sub){
-        res.status(403).send({message: 'No puede acceder a esta funcion'})
-    }else{
     Class.findById(classId, (err, commentsFind)=>{
         if(err){
             res.status(500).send({message: 'ERROR GENERAL', err});
@@ -338,9 +335,21 @@ function getComments(req, res){
         }
     })
 }
+
+//GETCLASS
+function getClass(req, res){
+    let classId = req.params.idC;
+    Class.findById(classId, (err, classFind)=>{
+        if(err){
+            res.status(500).send({message: 'ERROR GENERAL', err});
+        }else if(classFind){
+            res.send({message: 'Clase encontrada: ', class: classFind});
+        }else{
+            res.status(400).send({message: 'No existe esta clase'});
+        }
+    })
+
 }
-
-
 
 //UPLOAD DOCUMENTS
 function uploadImageC(req, res){
@@ -428,6 +437,7 @@ function getImageC(req, res){
         getComments,
         allClasses,
         uploadImageC,
-        getImageC
+        getImageC,
+        getClass
     }
     
