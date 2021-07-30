@@ -159,7 +159,7 @@ function allClasses(req, res){
             }else{
                 res.status(403).send({message: 'No se encontraron clases'});
             }
-        })
+        }).populate('user: teacher')
 
     }
 }
@@ -411,12 +411,11 @@ function uploadImageC(req, res){
 function getImageC(req, res){
     var fileName = req.params.fileName;
     var pathFile = './uploads/user/' + fileName;
-
     fs.exists(pathFile, (exists)=>{
         if(exists){
             return res.sendFile(path.resolve(pathFile))
         }else{
-           return res.status(404).send({message: 'Imagen inexistente'});
+           return res.status(404).send({message: 'Archivo inexistente'});
         }
     })
 }
