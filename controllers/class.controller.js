@@ -259,7 +259,7 @@ function deleteComment(req, res){
                         if(err){
                             res.status(500).send({message: 'ERROR GENERAL', err})
                         }else if(commentRemoved){
-                            res.status(200).send({message: 'El commentario fue eliminado, estos son tus comentarios por ahora:', comments: commentRemoved.comments})
+                            res.status(200).send({message: 'El comentario fue eliminado'})
                         }else{
                             res.status(200).send({message: 'El comentario no fue encontrado o ya eliminado'})
                         }  
